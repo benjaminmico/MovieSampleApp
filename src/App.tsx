@@ -2,30 +2,29 @@
  * MovieSampleApp
  */
 
-import React from 'react';
-import {SafeAreaView, StyleSheet, useColorScheme} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, {useEffect} from 'react';
+import {View} from 'react-native';
+import getMovies from './api/getMovies';
+import getMovieDetails from './api/getMovieDetails';
+import getMovieCredits from './api/getMovieCredits';
+import withProviders from './withProviders';
 
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator();
 
 const App: React.FC = () => {
-  return (
-    <SafeAreaView>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Messages">
-          <Stack.Screen
-            name="Messages"
-            component={MessagesScreen}
-            options={{
-              headerShown: true,
-              title: 'Messages',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
-  );
+  async function loadMovies() {
+    const movies = await getMovies();
+    console.log('movies', movies);
+    const movieDetails = await getMovieDetails(436969);
+    console.log('movieDetails', movieDetails);
+    const movieCredits = await getMovieCredits(436969);
+    console.log('movieCredits', movieCredits);
+  }
+
+  useEffect(() => {
+    loadMovies();
+  }, []);
+  return <View />;
 };
 
-export default App;
+export default withProviders(App);
