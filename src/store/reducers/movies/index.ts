@@ -1,16 +1,16 @@
-import {createReducer} from './../../utils/reducerFactory';
 import {
-  StoreMoviesActionLoading,
   StoreMoviesActionError,
+  StoreMoviesActionLoading,
   StoreMoviesActionPopulate,
   StoreMoviesActionSetCurrent,
-} from './../../actions/index';
+} from '../../actions/movies';
 import {
-  MOVIES_LOADING,
   MOVIES_ERROR,
+  MOVIES_LOADING,
   MOVIES_POPULATE,
   MOVIES_SET_CURRENT,
 } from '../../constants';
+import {createReducer} from './../../utils/reducerFactory';
 import {IMoviesReducerState} from './types';
 
 export {defaultState as DEFAULT_MOVIES_REDUCER};
@@ -19,7 +19,7 @@ export {defaultState as DEFAULT_MOVIES_REDUCER};
 const defaultState: IMoviesReducerState = {
   loading: false,
   error: false,
-  data: null,
+  data: [],
   currentMovie: null,
 };
 
