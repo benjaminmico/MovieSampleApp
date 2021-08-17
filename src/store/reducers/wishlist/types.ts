@@ -1,5 +1,4 @@
-import {IMovieListItem} from '../../../types/movies';
-
+import {IMovie, IMovieListItem} from './../../../types/movies';
 export interface IWishlistReducerState {
-  wishlist: IMovieListItem[];
+  wishlist: (IMovie | IMovieListItem)[];
 }

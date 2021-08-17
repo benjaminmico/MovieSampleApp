@@ -29,7 +29,7 @@ const migrations: MigrationManifest = {
 /** Store persist config & versioning */
 const persistConfig = {
   key: 'root',
-  version: 4,
+  version: 6,
   storage: AsyncStorage,
   migrate: createMigrate(migrations, {debug: false}),
 };

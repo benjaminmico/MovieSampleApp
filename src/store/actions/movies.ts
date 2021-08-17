@@ -1,5 +1,13 @@
-import {IMovieListItem, IMovie} from './../../types/movies';
-import {MOVIES_POPULATE, MOVIES_SET_CURRENT, MOVIES_LOADING, MOVIES_ERROR} from '../constants';
+import getMovieCredits from '../../api/getMovieCredits';
+import getMovieDetails from '../../api/getMovieDetails';
+import getMovies from '../../api/getMovies';
+import {IMovieListItem, IMovie} from '../../types/movies';
+import {
+  MOVIES_POPULATE,
+  MOVIES_SET_CURRENT,
+  MOVIES_LOADING,
+  MOVIES_ERROR,
+} from '../constants';
 
 export interface StoreMoviesActionLoading {
   type: typeof MOVIES_LOADING;
@@ -18,17 +26,17 @@ export interface StoreMoviesActionPopulate {
 
 export interface StoreMoviesActionSetCurrent {
   type: typeof MOVIES_SET_CURRENT;
-  setCurrentMovie: IMovie;
+  currentMovie: IMovie;
 }
 
-export const actionMoviesLoading = (
-  loading: boolean,
-): StoreMoviesActionLoading => {
-  return {
-    type: MOVIES_LOADING,
-    loading,
+export const actionMoviesLoading =
+  (loading: boolean) =>
+  async (dispatch: (arg0: {type: string; loading: boolean}) => void) => {
+    dispatch({
+      type: MOVIES_LOADING,
+      loading,
+    });
   };
-};
 
 export const actionMoviesError = (error: boolean): StoreMoviesActionError => {
   return {
@@ -37,22 +45,58 @@ export const actionMoviesError = (error: boolean): StoreMoviesActionError => {
   };
 };
 
-export const actionMoviesPopulate = (): StoreMoviesActionPopulate => {
+export const actionMoviesPopulate =
+  () =>
+  async (
+    dispatch: (
+      arg0: {type: string; data: IMovie} | {type: string; loading: boolean},
+    ) => void,
+  ) => {
+    dispatch({
+      type: MOVIES_LOADING,
+      loading: true,
+    });
+    const movies = await getMovies();
 
-  /** API ROUTES TO FETCH MOVIES */
-
-  return {
-    type: MOVIES_ERROR,
-    data:,
+    if (movies?.data) {
+      dispatch({type: MOVIES_POPULATE, data: movies.data});
+    }
+    dispatch({
+      type: MOVIES_LOADING,
+      loading: false,
+    });
   };
-};
 
-export const actionMoviesCurrentMovie = (): StoreMoviesActionSetCurrent => {
+export const actionMoviesCurrentMovie =
+  (id: number) =>
+  async (
+    dispatch: (
+      arg0:
+        | {type: string; currentMovie: IMovie}
+        | {type: string; loading: boolean},
+    ) => void,
+  ) => {
+    dispatch({
+      type: MOVIES_SET_CURRENT,
+      currentMovie: null,
+    });
+    dispatch({
+      type: MOVIES_LOADING,
+      loading: true,
+    });
 
-  /** API ROUTES TO FETCH CURRENT MOVIE & MOVIE CAST + CREW  */
+    const movieDetails = await getMovieDetails(id);
 
-  return {
-    type: MOVIES_SET_CURRENT,
-    currentMovie:,
+    const movieCredits = await getMovieCredits(id);
+
+    if (movieDetails?.data && movieCredits?.data) {
+      dispatch({
+        type: MOVIES_SET_CURRENT,
+        currentMovie: {...movieDetails?.data, ...movieCredits?.data},
+      });
+    }
+    dispatch({
+      type: MOVIES_LOADING,
+      loading: false,
+    });
   };
-};

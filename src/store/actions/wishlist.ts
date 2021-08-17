@@ -1,9 +1,10 @@
+import {IMovie} from './../../types/movies';
 import {WISHLIST_ADD, WISHLIST_REMOVE} from './../constants';
 import {IMovieListItem} from '../../types/movies';
 
 export interface StoreWishlistActionAdd {
   type: typeof WISHLIST_ADD;
-  movie: IMovieListItem;
+  movie: IMovie | IMovieListItem;
 }
 export interface StoreWishlistActionRemove {
   type: typeof WISHLIST_REMOVE;
@@ -11,7 +12,7 @@ export interface StoreWishlistActionRemove {
 }
 
 export const actionWishlistAdd = (
-  movie: IMovieListItem,
+  movie: IMovie | IMovieListItem,
 ): StoreWishlistActionAdd => {
   return {
     type: WISHLIST_ADD,
@@ -20,10 +21,10 @@ export const actionWishlistAdd = (
 };
 
 export const actionWishlistRemove = (
-  movie: IMovieListItem,
-): StoreWishlistActionAdd => {
+  movieId: number,
+): StoreWishlistActionRemove => {
   return {
     type: WISHLIST_REMOVE,
-    movie,
+    movieId,
   };
 };

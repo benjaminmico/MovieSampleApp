@@ -1,5 +1,9 @@
+import {IMovie, IMovieListItem} from './../../../types/movies';
 import {createReducer} from '../../utils/reducerFactory';
-import {StoreWishlistActionAdd} from './../../actions/wishlist';
+import {
+  StoreWishlistActionAdd,
+  StoreWishlistActionRemove,
+} from './../../actions/wishlist';
 import {WISHLIST_ADD, WISHLIST_REMOVE} from './../../constants';
 import {IWishlistReducerState} from './types';
 
@@ -24,11 +28,13 @@ const wishlistAdd = (
 /* Wishlist remove movie */
 const wishlistRemove = (
   state: IWishlistReducerState,
-  action: StoreWishlistActionAdd,
+  action: StoreWishlistActionRemove,
 ): IWishlistReducerState => {
   return {
     ...state,
-    wishlist: [...state.wishlist].filter(movie => movie.id !== action.movie.id),
+    wishlist: [...state.wishlist].filter(
+      (movie: IMovie | IMovieListItem) => movie.id !== action.movieId,
+    ),
   };
 };
 
