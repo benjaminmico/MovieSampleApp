@@ -59,7 +59,10 @@ const HomeScreen: React.FC = () => {
     index: number;
   }) => {
     return (
-      <View key={`${index}`} style={styles.headerContainerItem}>
+      <TouchableOpacity
+        onPress={() => onPressMovie(item)}
+        key={`${index}`}
+        style={styles.headerContainerItem}>
         <Image
           style={styles.imageHeader}
           source={{
@@ -73,7 +76,7 @@ const HomeScreen: React.FC = () => {
           style={styles.linearGradientContainer}
         />
         <Text style={styles.headerTitle}>{item.original_title}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
